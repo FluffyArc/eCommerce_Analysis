@@ -12,11 +12,11 @@
   - [Objective](#objective)
 - [**Stage 1: Data Preparation**](#stage-1-data-preparation)
   - [Table and ERD Creation](#table-and-erd-creation)
-- [Stage 2: Data Analysis](#stage-2-data-analysis)
+- [**Stage 2: Data Analysis**](#stage-2-data-analysis)
   - [Annual Customer Activity Growth](#annual-customer-activity-growth)
   - [Annual Product Category Quality Analysis](#annual-product-category-quality-analysis)
   - [Annual Payment Type Usage](#annual-payment-type-usage)
-- [Stage 3: Summary](#stage-3-summary)
+- [**Stage 3: Summary**](#stage-3-summary)
 
 ---
 
@@ -188,7 +188,7 @@ As the tables are created with both Primary Key and Foreign Key, the ERD Diagram
 
 ---
 
-# Stage 2: Data Analysis
+# **Stage 2: Data Analysis**
 
 ---
 
@@ -449,7 +449,7 @@ order by 5 desc
 Based on the given figure, it can be seen that most of the customers prefer using credit cards to pay their cart. The usage of credit cards also **spiked greatly** in 2017, from **258 to 35.568** in only one year. In contrast, paying using debit cards is the most less-preferred among the given payment type.
 
 ---
-# Stage 3: Summary
+# **Stage 3: Summary**
 ---
 
 Based on the analysis conducted in the previous stage, there are some key points to take:
