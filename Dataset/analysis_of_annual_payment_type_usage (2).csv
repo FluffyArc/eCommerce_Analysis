@@ -1,0 +1,14 @@
+"payment_type","count","years"
+"boleto",63,2016
+"boleto",9508,2017
+"boleto",10213,2018
+"credit_card",258,2016
+"credit_card",34568,2017
+"credit_card",41969,2018
+"debit_card",2,2016
+"debit_card",422,2017
+"debit_card",1105,2018
+"not_defined",3,2018
+"voucher",23,2016
+"voucher",3027,2017
+"voucher",2725,2018
