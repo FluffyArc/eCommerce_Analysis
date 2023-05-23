@@ -279,3 +279,5 @@ The result of the following query above is shown in the figure below.
 ![TASK2_Summary](https://github.com/FluffyArc/eCommerce_Analysis/assets/40890491/e189edc0-2e62-4927-be62-35b624fd6ae9)
 
 ![Task2_Dashboard](https://github.com/FluffyArc/eCommerce_Analysis/assets/40890491/b0b53b8a-2fa4-4888-8543-0a4b52d16490)
+
+It can be seen on the MAU chart that every year, the number of monthly active users shows a sharp increase. T In contrast, the average number of orders shows that in the given year, most customers only purchased from the marketplace once.

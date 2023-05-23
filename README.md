@@ -279,3 +279,122 @@ The result of the following query above is shown in the figure below.
 ![TASK2_Summary](https://github.com/FluffyArc/eCommerce_Analysis/assets/40890491/e189edc0-2e62-4927-be62-35b624fd6ae9)
 
 ![Task2_Dashboard](https://github.com/FluffyArc/eCommerce_Analysis/assets/40890491/b0b53b8a-2fa4-4888-8543-0a4b52d16490)
+
+It can be seen on the MAU chart that every year, the number of monthly active users shows a sharp increase from 109 users to 3.695 users in only one year. In contrast, the average number of orders shows that in the given year, most customers only purchased from the marketplace once.
+
+The comparison graph of the number of new customers and the loyal customers provides support information from the previous insight. 
+It shows that the number of new and loyal customers experienced significant growth in 2017. While the number of new customers remained increased the next year, the number of loyal customers decreased slightly in 2018.
+
+## Annual Product Category Quality Analysis
+**Objectives:**<br>
+Gain some insights for the following information:
+1. The total of the company's revenue every year.
+2. The total of cancelation requests every year.
+3. Top product that brings the highest revenue every year.
+4. Top product that has the most cancelation request every year.
+
+<details>
+    <summary>Click here to show the Queries.</summary>
+
+    ```sql
+    With annual_revenue as
+	(
+		Select Round(Cast (SUM(price + freight_value) as numeric), 2) as revenue, years from
+		(
+			Select 
+				a.order_id, 
+				a.price, 
+				a.freight_value,
+				b.order_status,
+				Extract(year from b.order_purchase_timestamp) as years
+			from 
+			public.order_items_dataset as a join
+			public.orders_dataset as b
+			ON 
+			a.order_id = b.order_id and
+			b.order_status like 'delivered'
+		) as ds
+		Where years is not NULL
+		group by 2
+	),
+	cancelled_order as
+	(
+		Select count(order_id) as cancelled, years from
+		(
+			Select order_id,
+			Extract(year from order_purchase_timestamp) as years
+			from public.orders_dataset
+			where order_status = 'canceled'
+		) as ds
+		Where years is not NULL
+		group by 2
+	),
+	top_purchased_product as
+	(
+		Select
+			product_category_name,
+			revenue,
+			years
+		from
+		(
+			Select 
+				Round(cast(SUM(a.price+a.freight_value) as numeric), 2) as revenue,
+				Extract(year from b.order_purchase_timestamp) as years,
+				c.product_category_name,
+				Rank() over
+				(
+					Partition by Extract(year from b.order_purchase_timestamp)
+					Order by SUM(a.price+a.freight_value) desc
+				) as ranks
+			from 
+			public.order_items_dataset as a 
+			join public.orders_dataset as b	ON a.order_id = b.order_id
+			join public.products_dataset as c ON a.product_id = c.product_id
+			Where b.order_status like 'delivered'
+			group by 2,3
+			order by ranks
+		) as ds
+		Where ranks = 1
+	),
+	top_cancelled_product as
+	(
+		Select 
+			product_category_name,
+			num_order as num_of_cancelation,
+			years
+		from
+		(
+			Select 
+				count(a.order_id) as num_order,
+				Extract(year from b.order_purchase_timestamp) as years,
+				c.product_category_name,
+				Rank() over
+				(
+					Partition by Extract(year from b.order_purchase_timestamp)
+					Order by count(a.order_id) desc
+				) as ranks
+			from 
+			public.order_items_dataset as a 
+			join public.orders_dataset as b	ON a.order_id = b.order_id
+			join public.products_dataset as c ON a.product_id = c.product_id
+			Where b.order_status like 'canceled'
+			group by 2,3
+			order by ranks
+		) ds
+		where ranks = 1
+	)
+	Select
+		a.years,
+		a.revenue as total_revenue,
+		b.cancelled as total_cancelation,
+		c.product_category_name as top_purchased_products,
+		c.revenue as total_revenue_top_products,
+		d.product_category_name as top_cancelled_products,
+		d.num_of_cancelation as total_cancelled_products
+	from annual_revenue a
+	JOIN cancelled_order b on a.years = b.years
+	JOIN top_purchased_product c on a.years = c.years
+	JOIN top_cancelled_product d on a.years = d.years
+    ```
+
+</details>
